@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    sssss
     <MapSearch />
   </div>
 </template>
