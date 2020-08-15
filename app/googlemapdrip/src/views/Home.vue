@@ -1,18 +1,18 @@
 <template>
   <div class="home">
-    <MapSearch />
+    <!-- <MapSearch /> -->
     <MapPlaces />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import MapSearch from "@/components/MapSearch.vue";
+// import MapSearch from "@/components/MapSearch.vue";
 import MapPlaces from "@/components/MapPlaces.vue";
 export default {
   name: "Home",
   components: {
-    MapSearch,
+    // MapSearch,
     MapPlaces
   }
 };

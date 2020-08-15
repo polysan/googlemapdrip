@@ -11,7 +11,7 @@ Vue.config.productionTip = false;
 Vue.use(ElementUI, { locale });
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "",
+    key: "AIzaSyBwjj6oaXdQVbFU_V8Vq1jEAjKHYKhr2xk",
     libraries: "places",
     region: "JP",
     language: "ja",
