@@ -42,6 +42,7 @@
               <div class="content">
                 <div class="header">{{ place.name }}</div>
                 <div class="meta">{{ place.rating }}</div>
+                <div class="meta">{{ place.vicinity }}</div>
               </div>
             </div>
           </div>
@@ -55,8 +56,15 @@
           }"
           :zoom="15"
           map-type-id="terrain"
-          style="width: 500px; height: 300px"
+          style="width: 600px; height: 500px"
         >
+          <GmapInfoWindow
+            :options="infoOptions"
+            :position="infoWindowPos"
+            :opened="infoWinOpen"
+            @closeclick="infoWinOpen = false"
+          >
+          </GmapInfoWindow>
           <GmapMarker
             :key="marker.place_id"
             v-for="marker in markers"
@@ -64,7 +72,7 @@
             :title="marker.title"
             :clickable="true"
             :draggable="false"
-            :icon="marker.icon"
+            @click="centerMarker(marker.geometry.location, marker)"
           >
           </GmapMarker>
         </GmapMap>
@@ -81,15 +89,22 @@ export default {
   components: {},
   data() {
     return {
-      // lat: 0,
-      // lng: 0,
       type: "",
       radius: "",
       places: [],
       Latitude: 0,
       Longitude: 0,
       markers: [],
-      address: ""
+      address: "",
+      infoOptions: {
+        content: "",
+        pixelOffset: {
+          width: 0,
+          height: -35
+        }
+      },
+      infoWindowPos: null,
+      infoWinOpen: false
     };
   },
   mounted() {
@@ -144,6 +159,40 @@ export default {
         );
       } else {
         alert("この端末では位置情報が取得できません");
+      }
+    },
+    centerMarker(location, marker) {
+      this.Latitude = location.lat;
+      this.Longitude = location.lng;
+      this.infoWindowPos = location;
+      this.infoWinOpen = true;
+      this.infoOptions.content = `<div class="card">
+  <div class="card-image">
+    <figure class="image is-4by3">
+      <img src="https://maps.googleapis.com/maps/api/place/photo?maxheight=200&maxwidth=200&photoreference=${
+        marker.photos[0].photo_reference
+      }&key=AIzaSyBwjj6oaXdQVbFU_V8Vq1jEAjKHYKhr2xk" alt="Placeholder image">
+    </figure>
+  </div>
+  <div class="card-content">
+    <div class="media">
+      <div class="media-content">
+        <p class="title is-4">${marker.name}</p>
+      </div>
+    </div>
+    <div class="content">
+      ${this.returnOpenhour(marker.opening_hours.open_now)}
+      <br>
+      <time datetime="2016-1-1">評価 ${marker.rating}</time>
+    </div>
+  </div>
+</div>`;
+    },
+    returnOpenhour(hourBoolean) {
+      if (hourBoolean === true) {
+        return "営業中";
+      } else {
+        return "営業時間外";
       }
     }
   }
